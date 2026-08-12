@@ -1,33 +1,76 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { beforeAfterCases } from '../data/beforeAfterData';
 import { Sparkles, SlidersHorizontal, ArrowLeftRight } from 'lucide-react';
 
 export default function BeforeAfter({ currentLang }) {
   const [activeCaseIndex, setActiveCaseIndex] = useState(0);
   const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef(null);
 
   const activeCase = beforeAfterCases[activeCaseIndex];
 
-  const handleMove = (clientX) => {
-    if (!containerRef.current) return;
+  const getPosition = useCallback((clientX) => {
+    if (!containerRef.current) return null;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    let percentage = (x / rect.width) * 100;
-    if (percentage < 0) percentage = 0;
-    if (percentage > 100) percentage = 100;
-    setSliderPosition(percentage);
-  };
+    let percentage = ((clientX - rect.left) / rect.width) * 100;
+    return Math.max(0, Math.min(100, percentage));
+  }, []);
 
-  const handleMouseMove = (e) => {
-    handleMove(e.clientX);
-  };
+  // ── Mouse drag handlers ──
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    const pos = getPosition(e.clientX);
+    if (pos !== null) setSliderPosition(pos);
+  }, [getPosition]);
 
-  const handleTouchMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging) return;
+    const pos = getPosition(e.clientX);
+    if (pos !== null) setSliderPosition(pos);
+  }, [isDragging, getPosition]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // ── Touch drag handlers ──
+  const handleTouchStart = useCallback((e) => {
+    setIsDragging(true);
     if (e.touches.length > 0) {
-      handleMove(e.touches[0].clientX);
+      const pos = getPosition(e.touches[0].clientX);
+      if (pos !== null) setSliderPosition(pos);
     }
-  };
+  }, [getPosition]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!isDragging) return;
+    if (e.touches.length > 0) {
+      const pos = getPosition(e.touches[0].clientX);
+      if (pos !== null) setSliderPosition(pos);
+    }
+  }, [isDragging, getPosition]);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Attach global mouseup/mousemove so dragging works even outside the container
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleTouchEnd);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   return (
     <section id="before-after" style={{ padding: 'clamp(4rem, 8vh, 6rem) 0', position: 'relative' }}>
@@ -42,7 +85,7 @@ export default function BeforeAfter({ currentLang }) {
             {currentLang === 'UR' ? 'حقیقی تبدیلی کا جائزہ لیں' : 'Interactive Before & After Gallery'}
           </h2>
           <p className="section-desc">
-            Drag the handle left or right to see actual dental restoration and aesthetic procedure results performed at our clinic.
+            Click and drag the handle left or right to see actual dental restoration results performed at our clinic.
           </p>
 
           {/* Procedure selector tabs */}
@@ -95,16 +138,15 @@ export default function BeforeAfter({ currentLang }) {
               </p>
             </div>
             <span className="badge-gold" style={{ fontSize: '0.8rem' }}>
-              <SlidersHorizontal size={14} /> Drag Slider to Compare
+              <SlidersHorizontal size={14} /> Click & Drag to Compare
             </span>
           </div>
 
           {/* Drag Image Container */}
           <div 
             ref={containerRef}
-            onMouseMove={handleMouseMove}
-            onTouchMove={handleTouchMove}
-            onTouchStart={(e) => handleTouchMove(e)}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
             style={{
               position: 'relative',
               height: 'clamp(260px, 45vh, 420px)',
@@ -112,7 +154,8 @@ export default function BeforeAfter({ currentLang }) {
               borderRadius: 'var(--radius-md)',
               overflow: 'hidden',
               userSelect: 'none',
-              cursor: 'ew-resize',
+              WebkitUserSelect: 'none',
+              cursor: isDragging ? 'grabbing' : 'grab',
               border: '1px solid rgba(0, 168, 181, 0.3)',
               touchAction: 'none'
             }}
@@ -121,29 +164,28 @@ export default function BeforeAfter({ currentLang }) {
             <img 
               src={activeCase.afterImg} 
               alt={activeCase.afterLabel}
+              draggable={false}
               style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
+                top: 0, left: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                pointerEvents: 'none'
               }}
             />
 
             {/* After Label */}
             <div style={{
               position: 'absolute',
-              top: '0.85rem',
-              right: '0.85rem',
+              top: '0.85rem', right: '0.85rem',
               background: 'rgba(16, 185, 129, 0.9)',
               color: '#FFF',
               padding: '0.25rem 0.65rem',
               borderRadius: 'var(--radius-pill)',
-              fontWeight: 700,
-              fontSize: '0.75rem',
+              fontWeight: 700, fontSize: '0.75rem',
               backdropFilter: 'blur(4px)',
-              zIndex: 5
+              zIndex: 5,
+              pointerEvents: 'none'
             }}>
               AFTER: {activeCase.afterLabel}
             </div>
@@ -151,65 +193,77 @@ export default function BeforeAfter({ currentLang }) {
             {/* Before Image (Clipped Overlay) */}
             <div style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
+              top: 0, left: 0,
               height: '100%',
               width: `${sliderPosition}%`,
               overflow: 'hidden',
               borderRight: '3px solid var(--accent-cyan)',
-              zIndex: 3
+              zIndex: 3,
+              pointerEvents: 'none'
             }}>
               <img 
                 src={activeCase.beforeImg} 
                 alt={activeCase.beforeLabel}
+                draggable={false}
                 style={{
                   position: 'absolute',
-                  top: 0,
-                  left: 0,
+                  top: 0, left: 0,
                   width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100%',
                   height: '100%',
-                  objectFit: 'cover',
-                  filter: 'grayscale(25%) sepia(20%)'
+                  objectFit: 'cover'
                 }}
               />
 
               {/* Before Label */}
               <div style={{
                 position: 'absolute',
-                top: '0.85rem',
-                left: '0.85rem',
+                top: '0.85rem', left: '0.85rem',
                 background: 'rgba(239, 68, 68, 0.9)',
                 color: '#FFF',
                 padding: '0.25rem 0.65rem',
                 borderRadius: 'var(--radius-pill)',
-                fontWeight: 700,
-                fontSize: '0.75rem',
+                fontWeight: 700, fontSize: '0.75rem',
                 backdropFilter: 'blur(4px)'
               }}>
                 BEFORE: {activeCase.beforeLabel}
               </div>
             </div>
 
-            {/* Slider Handle Divider Knob */}
+            {/* Slider Handle Knob */}
             <div style={{
               position: 'absolute',
               top: '50%',
               left: `${sliderPosition}%`,
               transform: 'translate(-50%, -50%)',
-              width: '38px',
-              height: '38px',
+              width: '42px', height: '42px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent-teal), var(--accent-cyan))',
               border: '3px solid #FFF',
-              boxShadow: '0 0 15px rgba(0, 194, 203, 0.8)',
+              boxShadow: isDragging
+                ? '0 0 20px rgba(0, 194, 203, 1), 0 0 40px rgba(0, 194, 203, 0.4)'
+                : '0 0 15px rgba(0, 194, 203, 0.8)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 10,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              transition: isDragging ? 'none' : 'box-shadow 0.3s ease'
             }}>
               <ArrowLeftRight size={18} color="#FFF" />
             </div>
+
+            {/* Vertical guide line */}
+            <div style={{
+              position: 'absolute',
+              top: 0, bottom: 0,
+              left: `${sliderPosition}%`,
+              width: '3px',
+              background: 'var(--accent-cyan)',
+              zIndex: 4,
+              pointerEvents: 'none',
+              transform: 'translateX(-50%)',
+              opacity: 0.6
+            }} />
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>

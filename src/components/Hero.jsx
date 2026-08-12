@@ -94,8 +94,8 @@ export default function Hero({ onOpenBooking, currentLang }) {
               boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)'
             }}>
               <img
-                src="/assets/dr_ashfaq_portrait.png"
-                alt="Dr. Ashfaq Ahmad – BDS, FCPS Gold Medalist Dental Surgeon"
+                src="/assets/clinic_interior.png"
+                alt="Dr. Ashfaq Ahmad Dental Clinic – Modern Treatment Room, Mardan"
                 style={{
                   width: '100%', display: 'block',
                   height: 'clamp(320px, 46vh, 480px)',
@@ -131,7 +131,7 @@ export default function Hero({ onOpenBooking, currentLang }) {
                   borderRadius: 'var(--radius-pill)', border: '1px solid rgba(212,175,55,0.3)'
                 }}>
                   <Star size={13} fill="#F59E0B" color="#F59E0B" />
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--gold-accent)' }}>4.9</span>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--gold-accent)' }}>5.0</span>
                 </div>
               </div>
             </div>

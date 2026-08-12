@@ -15,7 +15,7 @@ export const servicesData = [
       "Digital apex locator precision",
       "Reinforced with custom Zirconia/PFM Crown"
     ],
-    image: "/assets/dr_ashfaq_portrait.png"
+    image: "/assets/service_root_canal.png"
   },
   {
     id: "dental-implants",
@@ -51,7 +51,7 @@ export const servicesData = [
       "Improves bite alignment & jaw joint health",
       "Flexible monthly installment options in PKR"
     ],
-    image: "/assets/aligners_whitening.png"
+    image: "/assets/service_orthodontics.png"
   },
   {
     id: "teeth-whitening",
@@ -69,7 +69,7 @@ export const servicesData = [
       "Anti-sensitivity soothing gel included",
       "Long-lasting luminous smile"
     ],
-    image: "/assets/aligners_whitening.png"
+    image: "/assets/teeth_after_whitening.png"
   },
   {
     id: "crowns-bridges",
@@ -87,7 +87,7 @@ export const servicesData = [
       "Precision CAD/CAM edge fit",
       "10-year warranty option"
     ],
-    image: "/assets/clinic_hero_bg.png"
+    image: "/assets/clinic_interior.png"
   },
   {
     id: "scaling-polishing",
@@ -105,7 +105,7 @@ export const servicesData = [
       "Treats halitosis (bad breath)",
       "Recommended every 6 months"
     ],
-    image: "/assets/clinic_hero_bg.png"
+    image: "/assets/service_scaling.png"
   },
   {
     id: "wisdom-surgery",
@@ -123,7 +123,7 @@ export const servicesData = [
       "Dissolvable suture application",
       "Comprehensive post-op care pack"
     ],
-    image: "/assets/dr_ashfaq_portrait.png"
+    image: "/assets/service_extraction.png"
   },
   {
     id: "veneers",
@@ -141,6 +141,6 @@ export const servicesData = [
       "Stain-resistant porcelain surface",
       "Minimal tooth structure alteration"
     ],
-    image: "/assets/aligners_whitening.png"
+    image: "/assets/service_veneers.png"
   }
 ];
