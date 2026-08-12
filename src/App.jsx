@@ -91,15 +91,18 @@ export default function App() {
       />
 
       {/* Floating Action Buttons (Sticky WhatsApp & Call Buttons) */}
-      <div style={{
-        position: 'fixed',
-        bottom: '2rem',
-        right: '2rem',
-        zIndex: 999,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.8rem'
-      }}>
+      <div 
+        className="floating-action-buttons"
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 999,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.8rem'
+        }}
+      >
         {/* Floating WhatsApp Button */}
         <a 
           href={`https://wa.me/${clinicData.contact.whatsappNumber}?text=Assalam%20o%20Alaikum%20Dr.%20Ashfaq%20Dental%20Clinic,%20I%20want%20to%20book%20an%20appointment.`}

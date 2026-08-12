@@ -56,7 +56,7 @@ export default function BeforeAfter({ currentLang }) {
     setIsDragging(false);
   }, []);
 
-  // Attach global mouseup/mousemove so dragging works even outside the container
+  // Attach global listeners while dragging
   useEffect(() => {
     if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove);
@@ -73,7 +73,7 @@ export default function BeforeAfter({ currentLang }) {
   }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   return (
-    <section id="before-after" style={{ padding: 'clamp(4rem, 8vh, 6rem) 0', position: 'relative' }}>
+    <section id="before-after" style={{ padding: 'clamp(3.5rem, 7vh, 6rem) 0', position: 'relative' }}>
       <div className="container">
         
         {/* Section Header */}
@@ -92,8 +92,8 @@ export default function BeforeAfter({ currentLang }) {
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '0.75rem',
-            marginTop: '1.75rem',
+            gap: '0.6rem',
+            marginTop: '1.5rem',
             flexWrap: 'wrap'
           }}>
             {beforeAfterCases.map((c, idx) => (
@@ -104,9 +104,9 @@ export default function BeforeAfter({ currentLang }) {
                   setSliderPosition(50);
                 }}
                 className={activeCaseIndex === idx ? 'btn-primary' : 'btn-outline'}
-                style={{ fontSize: '0.85rem', padding: '0.55rem 1.1rem' }}
+                style={{ fontSize: '0.825rem', padding: '0.5rem 1rem' }}
               >
-                <Sparkles size={15} />
+                <Sparkles size={14} />
                 {c.title}
               </button>
             ))}
@@ -117,7 +117,7 @@ export default function BeforeAfter({ currentLang }) {
         <div className="glass-card" style={{
           maxWidth: '900px',
           margin: '0 auto',
-          padding: 'clamp(1rem, 3vw, 1.5rem)',
+          padding: 'clamp(0.85rem, 3vw, 1.5rem)',
           borderRadius: 'var(--radius-lg)'
         }}>
           {/* Info Header */}
@@ -125,20 +125,20 @@ export default function BeforeAfter({ currentLang }) {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '1rem',
+            marginBottom: '0.85rem',
             flexWrap: 'wrap',
             gap: '0.5rem'
           }}>
             <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFF' }}>
+              <h3 style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', fontWeight: 800, color: '#FFF' }}>
                 {activeCase.title}
               </h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                 Patient Age: {activeCase.patientAge} • Procedure Time: {activeCase.duration}
               </p>
             </div>
-            <span className="badge-gold" style={{ fontSize: '0.8rem' }}>
-              <SlidersHorizontal size={14} /> Click & Drag to Compare
+            <span className="badge-gold" style={{ fontSize: '0.75rem' }}>
+              <SlidersHorizontal size={13} /> Click & Drag to Compare
             </span>
           </div>
 
@@ -149,7 +149,7 @@ export default function BeforeAfter({ currentLang }) {
             onTouchStart={handleTouchStart}
             style={{
               position: 'relative',
-              height: 'clamp(260px, 45vh, 420px)',
+              height: 'clamp(240px, 42vh, 420px)',
               width: '100%',
               borderRadius: 'var(--radius-md)',
               overflow: 'hidden',
@@ -174,18 +174,24 @@ export default function BeforeAfter({ currentLang }) {
               }}
             />
 
-            {/* After Label */}
+            {/* AFTER Label - Positioned at Bottom Right so it NEVER overlaps BEFORE label */}
             <div style={{
               position: 'absolute',
-              top: '0.85rem', right: '0.85rem',
-              background: 'rgba(16, 185, 129, 0.9)',
+              bottom: '0.65rem', right: '0.65rem',
+              background: 'rgba(16, 185, 129, 0.95)',
               color: '#FFF',
-              padding: '0.25rem 0.65rem',
+              padding: '0.2rem 0.55rem',
               borderRadius: 'var(--radius-pill)',
-              fontWeight: 700, fontSize: '0.75rem',
+              fontWeight: 700, 
+              fontSize: 'clamp(0.68rem, 2vw, 0.75rem)',
               backdropFilter: 'blur(4px)',
               zIndex: 5,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              maxWidth: '48%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
             }}>
               AFTER: {activeCase.afterLabel}
             </div>
@@ -214,16 +220,22 @@ export default function BeforeAfter({ currentLang }) {
                 }}
               />
 
-              {/* Before Label */}
+              {/* BEFORE Label - Positioned at Top Left */}
               <div style={{
                 position: 'absolute',
-                top: '0.85rem', left: '0.85rem',
-                background: 'rgba(239, 68, 68, 0.9)',
+                top: '0.65rem', left: '0.65rem',
+                background: 'rgba(239, 68, 68, 0.95)',
                 color: '#FFF',
-                padding: '0.25rem 0.65rem',
+                padding: '0.2rem 0.55rem',
                 borderRadius: 'var(--radius-pill)',
-                fontWeight: 700, fontSize: '0.75rem',
-                backdropFilter: 'blur(4px)'
+                fontWeight: 700, 
+                fontSize: 'clamp(0.68rem, 2vw, 0.75rem)',
+                backdropFilter: 'blur(4px)',
+                maxWidth: '48%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
               }}>
                 BEFORE: {activeCase.beforeLabel}
               </div>
@@ -235,7 +247,7 @@ export default function BeforeAfter({ currentLang }) {
               top: '50%',
               left: `${sliderPosition}%`,
               transform: 'translate(-50%, -50%)',
-              width: '42px', height: '42px',
+              width: '40px', height: '40px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent-teal), var(--accent-cyan))',
               border: '3px solid #FFF',
@@ -266,7 +278,7 @@ export default function BeforeAfter({ currentLang }) {
             }} />
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          <div style={{ textAlign: 'center', marginTop: '0.75rem', fontSize: '0.825rem', color: 'var(--text-muted)' }}>
             {activeCase.details}
           </div>
 
