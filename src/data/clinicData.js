@@ -43,7 +43,7 @@ export const clinicData = {
     { day: "Thursday", open: "15:30", close: "21:00", text: "3:30 PM - 9:00 PM" },
     { day: "Friday", open: "15:30", close: "21:00", text: "3:30 PM - 9:00 PM" },
     { day: "Saturday", open: "15:30", close: "21:00", text: "3:30 PM - 9:00 PM" },
-    { day: "Sunday", open: "Closed", close: "Closed", text: "By Appointment Only / Emergency" }
+    { day: "Sunday", open: "Closed", close: "Closed", text: "Appointments / Emergency" }
   ],
   features: [
     { icon: "ShieldCheck", title: "100% Autoclave Sterilized", desc: "Hospital-grade Class B autoclave sterilization for absolute safety." },

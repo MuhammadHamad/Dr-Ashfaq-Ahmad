@@ -78,7 +78,7 @@ export default function LocationMap({ onOpenBooking, currentLang }) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.75rem' }}>
               {clinicData.hours.map((h, idx) => (
-                <div key={idx} style={{
+                <div key={idx} className="hours-row" style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -144,7 +144,7 @@ export default function LocationMap({ onOpenBooking, currentLang }) {
               style={{ border: 0, minHeight: '380px', filter: 'contrast(1.05) brightness(0.95)' }} 
               loading="eager" 
               allowFullScreen
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3307.781878696803!2d72.04431541521404!3d34.19277018056801!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dcce3d053f3d1d%3A0x6bd6acb411121231!2sMaaz%20medical%20center!5e0!3m2!1sen!2spk!4v1700000000000!5m2!1sen!2spk"
+              src="https://maps.google.com/maps?q=Dr.+Ashfaq+Ahmad+Dental+Clinic%2C+Maaz+medical+center%2C+Shamsi+Rd%2C+Muslimabad%2C+Mardan&t=&z=16&ie=UTF8&iwloc=&output=embed"
             ></iframe>
 
             {/* Bottom Overlay Box - Stacks cleanly on mobile */}
